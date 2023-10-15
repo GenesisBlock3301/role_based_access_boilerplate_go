@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"time"
 )
 
@@ -18,5 +17,5 @@ func main() {
 		CreatedAt    time.Time
 		UpdatedAt    time.Time
 	}
-	fmt.Println(User{}.Name)
+	//fmt.Println(User{}.Name)
 }
