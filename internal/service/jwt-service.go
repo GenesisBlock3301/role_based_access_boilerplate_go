@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -13,7 +14,7 @@ import (
 func GenerateTokenPair(userId uint) (string, string, error) {
 	tokenLifespan, err := strconv.Atoi("1")
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New("token Lifetime error")
 	}
 
 	// Generate token
@@ -21,19 +22,19 @@ func GenerateTokenPair(userId uint) (string, string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, tokenClaims)
 	tokenString, err := token.SignedString([]byte("secret_no_sifat"))
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New("generate token string error")
 	}
 
 	// Generate refresh token
 	refreshTokenLifespan, err := strconv.Atoi("2")
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New("refresh token Lifetime error")
 	}
 	refreshTokenClaims := getTokenClaims(userId, refreshTokenLifespan)
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
 	refreshTokenString, err := refreshToken.SignedString([]byte("secret_no_sifat"))
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New("generate refresh token string error")
 	}
 	return tokenString, refreshTokenString, nil
 }

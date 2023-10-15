@@ -4,6 +4,7 @@ import (
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations/db"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/routes"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/schemas"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"log"
@@ -21,6 +22,7 @@ func initEnv() {
 		log.Println("No local env file. Using global OS environment variables")
 	}
 	configurations.SetEnvVariable()
+	schemas.SetTableName()
 }
 
 func main() {
