@@ -1,7 +1,7 @@
-package middleware
+package middlewares
 
 import (
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/service"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -16,7 +16,7 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			return
 		}
 		// Validate Token
-		err := service.TokenValid(ctx)
+		err := services.TokenValid(ctx)
 		if err != nil {
 			ctx.String(http.StatusUnauthorized, "User not authorized!")
 			ctx.Abort()

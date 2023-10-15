@@ -2,14 +2,14 @@ package user_controller
 
 import (
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/service"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/service/user_services"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/services"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/services/user_services"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/utils"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-// CreateUserController UserRegistration controller
+// CreateUserController UserRegistration controllers
 func CreateUserController(ctx *gin.Context) {
 	var userInput serializers.User
 	// Validate UserInput
@@ -37,7 +37,7 @@ func LoginController(ctx *gin.Context) {
 		return
 	}
 	if isValidCredential {
-		token, refresh, err := service.GenerateTokenPair(userID)
+		token, refresh, err := services.GenerateTokenPair(userID)
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid credential"})
 			return
@@ -50,7 +50,7 @@ func LoginController(ctx *gin.Context) {
 }
 
 func GetCurrentUserController(ctx *gin.Context) {
-	userId, err := service.ExtractTokenID(ctx)
+	userId, err := services.ExtractTokenID(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
