@@ -8,10 +8,21 @@ import (
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/utils"
 	"github.com/dgrijalva/jwt-go"
+	"gorm.io/gorm"
 )
 
-func CreateUserService(user serializers.User) (bool, error) {
-	err := db.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error
+type UserInterface interface {
+	CreateUserService(user serializers.User) (bool, error)
+	VerifyCredentialService(email string, password string) (bool, uint, bool)
+	VerifyEmailService(token string) error
+}
+
+type UserService struct {
+	DB *gorm.DB
+}
+
+func (u *UserService) CreateUserService(user serializers.User) (bool, error) {
+	err := u.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error
 	if err == nil {
 		return false, errors.New("user already exits")
 	}
@@ -25,7 +36,7 @@ func CreateUserService(user serializers.User) (bool, error) {
 	return true, nil
 }
 
-func VerifyCredentialService(email string, password string) (bool, uint, bool) {
+func (u *UserService) VerifyCredentialService(email string, password string) (bool, uint, bool) {
 	user, err := utils.FindByEmail(email)
 	if user.IsActive == 0 {
 		return false, 0, true
@@ -36,7 +47,7 @@ func VerifyCredentialService(email string, password string) (bool, uint, bool) {
 	return utils.ComparePassword([]byte(user.Password), []byte(password)), user.ID, false
 }
 
-func VerifyEmailService(token string) error {
+func (u *UserService) VerifyEmailService(token string) error {
 	parseToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(configurations.EmailTokenSecret), nil
 	})

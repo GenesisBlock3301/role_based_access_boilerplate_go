@@ -11,7 +11,7 @@ func RootRouter(router *gin.Engine) {
 
 	apiRouter := router.Group("api/v1")
 	//roleRouter := apiRouter.Group("/role_controller-routes-services")
-	userRouter := apiRouter.Group("/user_controller-services")
+	userRouter := apiRouter.Group("/user")
 	user_routes.UserRouter(userRouter)
 	//RoleRouter(roleRouter)
 }

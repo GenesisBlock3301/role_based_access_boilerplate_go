@@ -7,8 +7,9 @@ import (
 )
 
 func UserRouter(userRouter *gin.RouterGroup) {
-	userRouter.POST("/create/", user_controller.CreateUserController)
-	userRouter.GET("/email-verify/", user_controller.VerifyEmailController)
-	userRouter.POST("/login", user_controller.LoginController)
-	userRouter.GET("/", middlewares.JWTAuthMiddleware(), user_controller.GetCurrentUserController)
+	userHandler := user_controller.UserHandler{}
+	userRouter.POST("/create/", userHandler.CreateUserController)
+	userRouter.GET("/email-verify/", userHandler.VerifyEmailController)
+	userRouter.POST("/login", userHandler.LoginController)
+	userRouter.GET("/", middlewares.JWTAuthMiddleware(), userHandler.GetCurrentUserController)
 }

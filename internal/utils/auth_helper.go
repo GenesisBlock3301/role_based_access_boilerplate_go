@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations/db"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/schemas"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
@@ -20,7 +21,7 @@ func ComparePassword(hashedPass []byte, inputPass []byte) bool {
 
 func GetUserById(id uint) (serializers.LoginUserSerializer, error) {
 	var user serializers.LoginUserSerializer
-	if err := db.DB.Table(configurations.Users).First(&user, id).Error; err != nil {
+	if err := db.DB.Table(schemas.Users).First(&user, id).Error; err != nil {
 		return user, errors.New("user_controller-services not found")
 	}
 	return user, nil
@@ -30,7 +31,7 @@ func GetUserById(id uint) (serializers.LoginUserSerializer, error) {
 func FindByEmail(email string) (serializers.LoginUserSerializer, error) {
 	user := serializers.LoginUserSerializer{}
 	// Find user based on email
-	if err := db.DB.Table(configurations.Users).Where("email = ?", email).Take(&user).Error; err != nil {
+	if err := db.DB.Table(schemas.Users).Where("email = ?", email).Take(&user).Error; err != nil {
 		return user, err
 	}
 	return user, nil
@@ -51,16 +52,31 @@ func GenerateEmailToken(email string) (string, error) {
 // UpdateUserVerificationStatus After click on Emailed verification's link, then activate user's account.
 func UpdateUserVerificationStatus(email interface{}) error {
 	var user serializers.LoginUserSerializer
-	err := db.DB.Table(configurations.Users).Where("email = ?", email).First(&user).Error
+	err := db.DB.Table(schemas.Users).Where("email = ?", email).First(&user).Error
 	if err != nil {
 		return err
 	}
 	if user.IsActive == 0 {
 		user.IsActive = 1
 	}
-	err = db.DB.Table(configurations.Users).Save(&user).Error
+	err = db.DB.Table(schemas.Users).Save(&user).Error
 	if err != nil {
 		return err
 	}
 	return nil
+}
+
+func AddingUserTokens(user serializers.User, token, refreshToken string) (serializers.User, error) {
+	if err := db.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error; err != nil {
+		return user, err
+	}
+
+	user.Token = token
+	user.RefreshToken = refreshToken
+	err := db.DB.Table(schemas.Users).Where("email = ?", user.Email).Save(&user).Error
+	if err != nil {
+		return user, err
+	}
+
+	return user, nil
 }
