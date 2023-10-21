@@ -1,21 +1,12 @@
 package main
 
 import (
-	"database/sql"
-	"time"
+	"fmt"
+	"regexp"
 )
 
 func main() {
-	type User struct {
-		ID           uint
-		Name         *string
-		Email        string
-		Age          uint8
-		Birthday     *time.Time
-		MemberNumber sql.NullString
-		ActivatedAt  sql.NullTime
-		CreatedAt    time.Time
-		UpdatedAt    time.Time
-	}
-	//fmt.Println(User{}.Name)
+	r := regexp.MustCompile("^[a-zA-Z]+[a-zA-Z0-9._-]*@[a-zA-Z].[a-zA-Z]")
+	match := r.Match([]byte("1nas1@gmail.com"))
+	fmt.Println(match)
 }

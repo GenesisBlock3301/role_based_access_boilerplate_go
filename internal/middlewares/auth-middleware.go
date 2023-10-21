@@ -22,6 +22,8 @@ func JWTAuthMiddleware() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
+		// Before request
 		ctx.Next()
+		//	After request logic
 	}
 }

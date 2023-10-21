@@ -19,7 +19,7 @@ func initEnv() {
 	log.Println("Loading env setting....")
 	err := godotenv.Load()
 	if err != nil {
-		log.Println("No local env file. Using global OS environment variables")
+		log.Fatal("No local env file. Using global OS environment variables")
 	}
 	configurations.SetEnvVariable()
 	schemas.SetTableName()
