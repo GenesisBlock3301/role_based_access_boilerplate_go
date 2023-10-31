@@ -11,6 +11,7 @@ var (
 	CurrentSite      string
 	BaseUrl          string
 	EmailTokenSecret string
+	OtpSecret        string
 )
 
 func SetEnvVariable() {
@@ -22,4 +23,5 @@ func SetEnvVariable() {
 	CurrentSite = os.Getenv("CURRENT_SITE")
 	BaseUrl = os.Getenv("BASE_URL")
 	EmailTokenSecret = os.Getenv("EMAIL_TOKEN_SECRET")
+	OtpSecret = os.Getenv("OTP_SECRET")
 }

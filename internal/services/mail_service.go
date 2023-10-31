@@ -1,4 +1,4 @@
-package user_services
+package services
 
 import (
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations"
@@ -7,11 +7,16 @@ import (
 	"os"
 )
 
-func SendEmail(user serializers.User, toEmail, subject, token string) error {
-	relativeLink := "/email-verify/"
-	absURL := "http://" + configurations.CurrentSite + configurations.BaseUrl + relativeLink + "?token=" + token
-	emailBody := "Hi,  " + user.Email + " Use the link below to verify your email\n\n" + absURL
-	//err = utils.SendEmail(user.Email, "Verify Your Email", emailBody)
+func SendEmail(toEmail, subject, token string, data serializers.OTPSerializer) error {
+	var relativeLink, absURL, emailBody string
+	if data.IsOTP == true {
+		emailBody = "Hi, Your OTP code is: " + data.Code
+	} else {
+		relativeLink = "/email-verify/"
+		absURL = "http://" + configurations.CurrentSite + configurations.BaseUrl + relativeLink + "?token=" + token
+		emailBody = "Hi,  " + toEmail + " Use the link below to verify your email\n\n" + absURL
+	}
+
 	from := os.Getenv("EMAIL")
 	password := os.Getenv("EMAIL_PASSWORD")
 	smtpHost := "smtp.gmail.com"

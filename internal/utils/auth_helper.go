@@ -22,7 +22,7 @@ func ComparePassword(hashedPass []byte, inputPass []byte) bool {
 func GetUserById(id uint) (serializers.LoginUserSerializer, error) {
 	var user serializers.LoginUserSerializer
 	if err := db.DB.Table(schemas.Users).First(&user, id).Error; err != nil {
-		return user, errors.New("user_controller-services not found")
+		return user, errors.New("user not found")
 	}
 	return user, nil
 }

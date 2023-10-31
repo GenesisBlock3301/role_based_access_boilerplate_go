@@ -1,4 +1,4 @@
-package user_services
+package services
 
 import (
 	"errors"
@@ -8,28 +8,25 @@ import (
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/utils"
 	"github.com/dgrijalva/jwt-go"
-	"gorm.io/gorm"
 )
 
-type UserInterface interface {
-	CreateUserService(user serializers.User) (bool, error)
+type IUserServiceInterface interface {
+	CreateUserService(user serializers.RegisterSerializer) (bool, error)
 	VerifyCredentialService(email string, password string) (bool, uint, bool)
 	VerifyEmailService(token string) error
 }
 
-type UserService struct {
-	DB *gorm.DB
-}
+type UserService struct{}
 
-func (u *UserService) CreateUserService(user serializers.User) (bool, error) {
-	err := u.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error
+func (u *UserService) CreateUserService(user serializers.RegisterSerializer) (bool, error) {
+	err := db.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error
 	if err == nil {
 		return false, errors.New("user already exits")
 	}
 	user.Password = utils.HashAndSalt([]byte(user.Password))
 	db.DB.Table(schemas.Users).Create(&user)
 	token, _ := utils.GenerateEmailToken(user.Email)
-	err = SendEmail(user, user.Email, "Verify Your Email", token)
+	err = SendEmail(user.Email, "Verify Your Email", token, serializers.OTPSerializer{})
 	if err != nil {
 		return false, errors.New("sending email failed")
 	}
