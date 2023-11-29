@@ -2,11 +2,11 @@ package services
 
 import (
 	"errors"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations/db"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/schemas"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/utils"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations/db"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/schemas"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/serializers"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/utils"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -18,7 +18,7 @@ type IUserServiceInterface interface {
 
 type UserService struct{}
 
-func (u *UserService) CreateUserService(user serializers.RegisterSerializer) (bool, error) {
+func CreateUserService(user serializers.RegisterSerializer) (bool, error) {
 	err := db.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error
 	if err == nil {
 		return false, errors.New("user already exits")
@@ -33,7 +33,7 @@ func (u *UserService) CreateUserService(user serializers.RegisterSerializer) (bo
 	return true, nil
 }
 
-func (u *UserService) VerifyCredentialService(email string, password string) (bool, uint, bool) {
+func VerifyCredentialService(email string, password string) (bool, uint, bool) {
 	user, err := utils.FindByEmail(email)
 	if user.IsActive == 0 {
 		return false, 0, true
@@ -44,7 +44,7 @@ func (u *UserService) VerifyCredentialService(email string, password string) (bo
 	return utils.ComparePassword([]byte(user.Password), []byte(password)), user.ID, false
 }
 
-func (u *UserService) VerifyEmailService(token string) error {
+func VerifyEmailService(token string) error {
 	parseToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(configurations.EmailTokenSecret), nil
 	})

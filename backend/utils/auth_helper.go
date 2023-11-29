@@ -2,10 +2,10 @@ package utils
 
 import (
 	"errors"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations/db"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/schemas"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations/db"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/schemas"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/serializers"
 	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )

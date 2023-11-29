@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/configurations"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/services"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/utils"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/validations"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/serializers"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/services"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/utils"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/validations"
 	"github.com/diebietse/gotp/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -13,13 +13,18 @@ import (
 	"time"
 )
 
-// UserHandler Implement dependency injection here
-type UserHandler struct {
-	UserService services.IUserServiceInterface
-}
-
 // CreateUserController UserRegistration controllers
-func (u *UserHandler) CreateUserController(ctx *gin.Context) {
+// @Summary Register User.
+// @Schemes http https
+// @Description User Registration
+// @Tags User
+// @Param user body serializers.RegisterSerializer true "User info"
+// @Accept json
+// @Produce json
+// @Success 200 {string} successfully login
+// @failure      400              {string}  string    "error"
+// @Router /create [post]
+func CreateUserController(ctx *gin.Context) {
 	var userInput serializers.RegisterSerializer
 	// Validate UserInput
 	if err := ctx.ShouldBindJSON(&userInput); err != nil {
@@ -33,7 +38,7 @@ func (u *UserHandler) CreateUserController(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"errors": isErrors})
 		return
 	}
-	_, err = u.UserService.CreateUserService(userInput)
+	_, err = services.CreateUserService(userInput)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -41,13 +46,24 @@ func (u *UserHandler) CreateUserController(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"message": "Email sent successfully . Check your email & verify email"})
 }
 
-func (u *UserHandler) LoginController(ctx *gin.Context) {
+// LoginController
+// @Summary Login user.
+// @Schemes http https
+// @Description User login
+// @Tags User
+// @Param user body serializers.LoginSerializer true "User info"
+// @Accept json
+// @Produce json
+// @Success 200 {string} successfully login
+// @failure      400              {string}  string    "error"
+// @Router /login [post]
+func LoginController(ctx *gin.Context) {
 	var user serializers.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	isValidCredential, userID, inActiveUser := u.UserService.VerifyCredentialService(user.Email, user.Password)
+	isValidCredential, userID, inActiveUser := services.VerifyCredentialService(user.Email, user.Password)
 	if inActiveUser {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Inactive user try to active your account first."})
 		return
@@ -65,7 +81,18 @@ func (u *UserHandler) LoginController(ctx *gin.Context) {
 	}
 }
 
-func (u *UserHandler) GetCurrentUserController(ctx *gin.Context) {
+// @BasePath /api/v1
+
+// GetCurrentUserController PingExample godoc
+// @Summary Get authenticated user.
+// @Schemes
+// @Description do ping
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router / [get]
+func GetCurrentUserController(ctx *gin.Context) {
 	userId, err := services.ExtractTokenID(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -84,11 +111,11 @@ func (u *UserHandler) GetCurrentUserController(ctx *gin.Context) {
 
 }
 
-func (u *UserHandler) VerifyEmailController(ctx *gin.Context) {
+func VerifyEmailController(ctx *gin.Context) {
 	token := ctx.Query("token")
 
 	// Extract email and verify
-	err := u.UserService.VerifyEmailService(token)
+	err := services.VerifyEmailService(token)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
@@ -98,7 +125,7 @@ func (u *UserHandler) VerifyEmailController(ctx *gin.Context) {
 
 }
 
-func (u *UserHandler) GenerateOTP(ctx *gin.Context) {
+func GenerateOTP(ctx *gin.Context) {
 	var UserLogin serializers.LoginSerializer
 	// Validate UserInput
 	if err := ctx.ShouldBindJSON(&UserLogin); err != nil {
@@ -121,7 +148,7 @@ func (u *UserHandler) GenerateOTP(ctx *gin.Context) {
 
 }
 
-func (u *UserHandler) VerifyOTP(ctx *gin.Context) {
+func VerifyOTP(ctx *gin.Context) {
 	var otp serializers.VerifyOTPSerializer
 	// Validate OTP Input.
 	if err := ctx.ShouldBindJSON(&otp); err != nil {
@@ -141,4 +168,19 @@ func (u *UserHandler) VerifyOTP(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"status": "Successfully Otp verified", "OTP": verify})
+}
+
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /example/helloworld [get]
+func Helloworld(g *gin.Context) {
+	g.JSON(http.StatusOK, "helloworld")
 }

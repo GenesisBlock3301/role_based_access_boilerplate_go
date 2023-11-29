@@ -1,23 +1,19 @@
 package controllers
 
 import (
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/serializers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/internal/services"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/serializers"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type RoleHandler struct {
-	RoleService services.IRoleService
-}
-
-func (r *RoleHandler) CreateRoleController(ctx *gin.Context) {
+func CreateRoleController(ctx *gin.Context) {
 	var roleInput serializers.Role
 	if err := ctx.ShouldBindJSON(&roleInput); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	_, err := r.RoleService.CreateRoleService(&roleInput)
+	_, err := services.CreateRoleService(&roleInput)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -25,10 +21,10 @@ func (r *RoleHandler) CreateRoleController(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"message": "Successfully role created!"})
 }
 
-func (r *RoleHandler) GetALLRoleController(ctx *gin.Context) {
+func GetALLRoleController(ctx *gin.Context) {
 	limit := ctx.Query("limit")
 	offset := ctx.Query("offset")
-	roleCount, roles := r.RoleService.GetAllRolesService(limit, offset)
+	roleCount, roles := services.GetAllRolesService(limit, offset)
 	ctx.JSON(200, gin.H{
 		"totalRole": roleCount,
 		"roles":     roles,
