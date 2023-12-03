@@ -54,7 +54,7 @@ func CreateUserController(ctx *gin.Context) {
 // @Param user body serializers.LoginSerializer true "User info"
 // @Accept json
 // @Produce json
-// @Success 200 {string} successfully login
+// @Success 200 {string} successfully login.
 // @failure      400              {string}  string    "error"
 // @Router /login [post]
 func LoginController(ctx *gin.Context) {
@@ -83,14 +83,14 @@ func LoginController(ctx *gin.Context) {
 
 // @BasePath /api/v1
 
-// GetCurrentUserController PingExample godoc
+// GetCurrentUserController
 // @Summary Get authenticated user.
 // @Schemes
 // @Description do ping
 // @Tags User
 // @Accept json
 // @Produce json
-// @Success 200 {string} Helloworld
+// @Success 200 {string} get user successfully.
 // @Router / [get]
 func GetCurrentUserController(ctx *gin.Context) {
 	userId, err := services.ExtractTokenID(ctx)
@@ -111,6 +111,16 @@ func GetCurrentUserController(ctx *gin.Context) {
 
 }
 
+// VerifyEmailController
+// @BasePath /api/v1
+// @Summary Verify email controller.
+// @Schemes
+// @Param token query string true "Email to be verified" Format(email)
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {string} successfully verify email.
+// @Router /email-verify/ [get]
 func VerifyEmailController(ctx *gin.Context) {
 	token := ctx.Query("token")
 
@@ -125,6 +135,15 @@ func VerifyEmailController(ctx *gin.Context) {
 
 }
 
+// GenerateOTP
+// @BasePath /api/v1
+// @Summary Generate OTP.
+// @Param user body serializers.LoginSerializer true "Generate OTP"
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {string} successfully generate OTP
+// @Router /generate-otp/ [get]
 func GenerateOTP(ctx *gin.Context) {
 	var UserLogin serializers.LoginSerializer
 	// Validate UserInput
@@ -148,6 +167,16 @@ func GenerateOTP(ctx *gin.Context) {
 
 }
 
+// VerifyOTP
+// @BasePath /api/v1
+// @Summary Verify OTP.
+// @Schemes
+// @Param user body serializers.VerifyOTPSerializer true "OTP info"
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {string} sent verify init.
+// @Router /verify-otp/ [get]
 func VerifyOTP(ctx *gin.Context) {
 	var otp serializers.VerifyOTPSerializer
 	// Validate OTP Input.
@@ -168,19 +197,4 @@ func VerifyOTP(ctx *gin.Context) {
 		return
 	}
 	ctx.JSON(http.StatusOK, gin.H{"status": "Successfully Otp verified", "OTP": verify})
-}
-
-// @BasePath /api/v1
-
-// PingExample godoc
-// @Summary ping example
-// @Schemes
-// @Description do ping
-// @Tags example
-// @Accept json
-// @Produce json
-// @Success 200 {string} Helloworld
-// @Router /example/helloworld [get]
-func Helloworld(g *gin.Context) {
-	g.JSON(http.StatusOK, "helloworld")
 }

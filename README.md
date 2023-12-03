@@ -89,8 +89,9 @@ README.md: This file, providing an overview of the project.
 ---
 1. Authenticated User login using credentials (username, password).
 2. Verify credential of users(Username & password).
-3. Add JWT claims. For example: `Authorization`, `exp`, `user_id` etc.
-4. Using these claims generate token with secret key.
+3. Then generate token and enter Generate token function.
+4. Add JWT claims. For example: `Authorization`, `exp`, `user_id` etc.
+5. Using these claims generate token with secret key.
 
 
 ## How to make JWT token validation when I make call with this Token(middleware):
@@ -104,6 +105,16 @@ README.md: This file, providing an overview of the project.
 ## How does Register email verification work:
 
 ---
-1. After save user's information.
-2. Then make email template with verification link and send it on behalf of system to client.
-3. Click on that link & activate this user.
+1. Firstly user apply for information registration.
+2. Then make email template with **verification link** and send it on behalf of system to client.
+3. Verification link containing unique token.
+4. Click on that link & activate this user & redirect to home page.
+
+## How generate OTP work & when we should use OTP:
+
+---
+Generally OTP generated after enter login credentials, here we use One time Generated password,
+lifetime 30 sec.
+1. Generated OTP from gotp module.
+2. then send this OTP code to email.
+3. Verify OTP code to enter into another gotp module.

@@ -13,5 +13,4 @@ func UserRouter(userRouter *gin.RouterGroup) {
 	userRouter.POST("/login", controllers.LoginController)
 	userRouter.GET("/generate-otp/", controllers.GenerateOTP)
 	userRouter.POST("/verify-otp/", controllers.VerifyOTP)
-	userRouter.GET("/helloworld", controllers.Helloworld)
 }

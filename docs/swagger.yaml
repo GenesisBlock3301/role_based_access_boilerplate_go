@@ -20,6 +20,11 @@ definitions:
     - name
     - password
     type: object
+  serializers.VerifyOTPSerializer:
+    properties:
+      code:
+        type: string
+    type: object
 externalDocs:
   description: OpenAPI
   url: https://swagger.io/resources/open-api/
@@ -78,11 +83,17 @@ paths:
       summary: Register User.
       tags:
       - User
-  /example/helloworld:
+  /email-verify/:
     get:
       consumes:
       - application/json
-      description: do ping
+      parameters:
+      - description: Email to be verified
+        format: email
+        in: query
+        name: token
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -90,9 +101,30 @@ paths:
           description: OK
           schema:
             type: string
-      summary: ping example
+      summary: Verify email controller.
       tags:
-      - example
+      - User
+  /generate-otp/:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Generate OTP
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.LoginSerializer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Generate OTP.
+      tags:
+      - User
   /login:
     post:
       consumes:
@@ -117,6 +149,27 @@ paths:
           schema:
             type: string
       summary: Login user.
+      tags:
+      - User
+  /verify-otp/:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: OTP info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.VerifyOTPSerializer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Verify OTP.
       tags:
       - User
 securityDefinitions:

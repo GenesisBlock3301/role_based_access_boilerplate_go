@@ -87,9 +87,8 @@ const docTemplate = `{
                 }
             }
         },
-        "/example/helloworld": {
+        "/email-verify/": {
             "get": {
-                "description": "do ping",
                 "consumes": [
                     "application/json"
                 ],
@@ -97,9 +96,52 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "example"
+                    "User"
                 ],
-                "summary": "ping example",
+                "summary": "Verify email controller.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "format": "email",
+                        "description": "Email to be verified",
+                        "name": "token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/generate-otp/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Generate OTP.",
+                "parameters": [
+                    {
+                        "description": "Generate OTP",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/serializers.LoginSerializer"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -149,6 +191,39 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/verify-otp/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Verify OTP.",
+                "parameters": [
+                    {
+                        "description": "OTP info",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/serializers.VerifyOTPSerializer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -178,6 +253,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "serializers.VerifyOTPSerializer": {
+            "type": "object",
+            "properties": {
+                "code": {
                     "type": "string"
                 }
             }
