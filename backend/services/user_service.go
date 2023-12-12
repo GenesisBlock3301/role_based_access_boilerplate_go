@@ -18,7 +18,7 @@ type IUserServiceInterface interface {
 
 type UserService struct{}
 
-func CreateUserService(user serializers.RegisterSerializer) (bool, error) {
+func (u *UserService) CreateUserService(user serializers.RegisterSerializer) (bool, error) {
 	err := db.DB.Table(schemas.Users).Where("email = ?", user.Email).First(&user).Error
 	if err == nil {
 		return false, errors.New("user already exits")
@@ -33,7 +33,7 @@ func CreateUserService(user serializers.RegisterSerializer) (bool, error) {
 	return true, nil
 }
 
-func VerifyCredentialService(email string, password string) (bool, uint, bool) {
+func (u *UserService) VerifyCredentialService(email string, password string) (bool, uint, bool) {
 	user, err := utils.FindByEmail(email)
 	if user.IsActive == 0 {
 		return false, 0, true
@@ -44,7 +44,7 @@ func VerifyCredentialService(email string, password string) (bool, uint, bool) {
 	return utils.ComparePassword([]byte(user.Password), []byte(password)), user.ID, false
 }
 
-func VerifyEmailService(token string) error {
+func (u *UserService) VerifyEmailService(token string) error {
 	parseToken, err := jwt.Parse(token, func(token *jwt.Token) (interface{}, error) {
 		return []byte(configurations.EmailTokenSecret), nil
 	})

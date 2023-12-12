@@ -13,6 +13,16 @@ import (
 	"time"
 )
 
+type UserController struct {
+	UserService services.UserService
+}
+
+func NewUserController(service services.UserService) *UserController {
+	return &UserController{
+		UserService: service,
+	}
+}
+
 // CreateUserController UserRegistration controllers
 // @Summary Register User.
 // @Schemes http https
@@ -24,7 +34,7 @@ import (
 // @Success 200 {string} successfully login
 // @failure      400              {string}  string    "error"
 // @Router /create [post]
-func CreateUserController(ctx *gin.Context) {
+func (u *UserController) CreateUserController(ctx *gin.Context) {
 	var userInput serializers.RegisterSerializer
 	// Validate UserInput
 	if err := ctx.ShouldBindJSON(&userInput); err != nil {
@@ -38,7 +48,7 @@ func CreateUserController(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"errors": isErrors})
 		return
 	}
-	_, err = services.CreateUserService(userInput)
+	_, err = u.UserService.CreateUserService(userInput)
 	if err != nil {
 		ctx.JSON(500, gin.H{"error": err.Error()})
 		return
@@ -57,13 +67,13 @@ func CreateUserController(ctx *gin.Context) {
 // @Success 200 {string} successfully login.
 // @failure      400              {string}  string    "error"
 // @Router /login [post]
-func LoginController(ctx *gin.Context) {
+func (u *UserController) LoginController(ctx *gin.Context) {
 	var user serializers.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	isValidCredential, userID, inActiveUser := services.VerifyCredentialService(user.Email, user.Password)
+	isValidCredential, userID, inActiveUser := u.UserService.VerifyCredentialService(user.Email, user.Password)
 	if inActiveUser {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Inactive user try to active your account first."})
 		return
@@ -92,7 +102,7 @@ func LoginController(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {string} get user successfully.
 // @Router / [get]
-func GetCurrentUserController(ctx *gin.Context) {
+func (u *UserController) GetCurrentUserController(ctx *gin.Context) {
 	userId, err := services.ExtractTokenID(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -121,11 +131,11 @@ func GetCurrentUserController(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {string} successfully verify email.
 // @Router /email-verify/ [get]
-func VerifyEmailController(ctx *gin.Context) {
+func (u *UserController) VerifyEmailController(ctx *gin.Context) {
 	token := ctx.Query("token")
 
 	// Extract email and verify
-	err := services.VerifyEmailService(token)
+	err := u.UserService.VerifyEmailService(token)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Internal Server Error"})
 		return
@@ -144,7 +154,7 @@ func VerifyEmailController(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {string} successfully generate OTP
 // @Router /generate-otp/ [get]
-func GenerateOTP(ctx *gin.Context) {
+func (u *UserController) GenerateOTP(ctx *gin.Context) {
 	var UserLogin serializers.LoginSerializer
 	// Validate UserInput
 	if err := ctx.ShouldBindJSON(&UserLogin); err != nil {
@@ -177,7 +187,7 @@ func GenerateOTP(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {string} sent verify init.
 // @Router /verify-otp/ [get]
-func VerifyOTP(ctx *gin.Context) {
+func (u *UserController) VerifyOTP(ctx *gin.Context) {
 	var otp serializers.VerifyOTPSerializer
 	// Validate OTP Input.
 	if err := ctx.ShouldBindJSON(&otp); err != nil {

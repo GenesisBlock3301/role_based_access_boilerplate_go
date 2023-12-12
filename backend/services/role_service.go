@@ -14,8 +14,10 @@ type IRoleService interface {
 	GetAllRolesService(limit string, offset string) (int64, []serializers.RoleResponse)
 }
 
+type RoleService struct{}
+
 // CreateRoleService for creating Service
-func CreateRoleService(role *serializers.Role) (bool, error) {
+func (r *RoleService) CreateRoleService(role *serializers.Role) (bool, error) {
 	err := db.DB.Table(schemas.Roles).Where("role_name = ?", role.RoleName).First(&role).Error
 	if err == nil {
 		return false, errors.New("role already exits")
@@ -28,7 +30,7 @@ func CreateRoleService(role *serializers.Role) (bool, error) {
 }
 
 // GetAllRolesService GetAllRoles service
-func GetAllRolesService(limit string, offset string) (int64, []serializers.RoleResponse) {
+func (r *RoleService) GetAllRolesService(limit string, offset string) (int64, []serializers.RoleResponse) {
 	var count int64
 
 	if err := db.DB.Table("role_based_access.roles").Count(&count).Error; err != nil {
