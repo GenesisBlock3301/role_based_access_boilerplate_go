@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  app:
+    image: golang:alpine
+    command: sh -c "go build -o app && ./app"
+    ports:
+      - 8081:8080
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      CURRENT_SITE: postgres:8081/api/v1/
+      BASE_URL: ${BASE_URL}
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - ./Role_based_access_control.sql:/docker-entrypoint-initdb.d/Role_based_access_control.sql
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+
+volumes:
+  postgres-data:

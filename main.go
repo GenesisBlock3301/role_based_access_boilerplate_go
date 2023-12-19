@@ -56,5 +56,5 @@ func main() {
 
 	router.HandleMethodNotAllowed = true
 	routes.RootRouter(router)
-	router.Run("localhost:8080")
+	router.Run(":8081")
 }
