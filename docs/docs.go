@@ -87,6 +87,39 @@ const docTemplate = `{
                 }
             }
         },
+        "/create/": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Create Role.",
+                "parameters": [
+                    {
+                        "description": "Role Info",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/serializers.Role"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/email-verify/": {
             "get": {
                 "consumes": [
@@ -142,6 +175,28 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/list/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Create Role.",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -257,6 +312,14 @@ const docTemplate = `{
                 }
             }
         },
+        "serializers.Role": {
+            "type": "object",
+            "properties": {
+                "role_name": {
+                    "type": "string"
+                }
+            }
+        },
         "serializers.VerifyOTPSerializer": {
             "type": "object",
             "properties": {
@@ -283,8 +346,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "Swagger Example API",
-	Description:      "This is a sample server celler server.",
+	Title:            "Role Based Authentication API",
+	Description:      "This is golang full-featured project.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

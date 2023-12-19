@@ -20,6 +20,11 @@ definitions:
     - name
     - password
     type: object
+  serializers.Role:
+    properties:
+      role_name:
+        type: string
+    type: object
   serializers.VerifyOTPSerializer:
     properties:
       code:
@@ -34,12 +39,12 @@ info:
     email: support@swagger.io
     name: API Support
     url: http://www.swagger.io/support
-  description: This is a sample server celler server.
+  description: This is golang full-featured project.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: http://swagger.io/terms/
-  title: Swagger Example API
+  title: Role Based Authentication API
   version: "1.0"
 paths:
   /:
@@ -83,6 +88,27 @@ paths:
       summary: Register User.
       tags:
       - User
+  /create/:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Role Info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.Role'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create Role.
+      tags:
+      - Role
   /email-verify/:
     get:
       consumes:
@@ -125,6 +151,20 @@ paths:
       summary: Generate OTP.
       tags:
       - User
+  /list/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create Role.
+      tags:
+      - Role
   /login:
     post:
       consumes:

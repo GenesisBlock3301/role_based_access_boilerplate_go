@@ -28,9 +28,9 @@ func initEnv() {
 	schemas.SetTableName()
 }
 
-// @title           Swagger Example API
+// @title           Role Based Authentication API
 // @version         1.0
-// @description     This is a sample server celler server.
+// @description     This is golang full-featured project.
 // @termsOfService  http://swagger.io/terms/
 
 // @contact.name   API Support

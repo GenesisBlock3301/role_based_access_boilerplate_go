@@ -17,6 +17,15 @@ func NewRoleController(RoleService services.RoleService) *RoleController {
 	}
 }
 
+// CreateRoleController
+// @BasePath /api/v1
+// @Summary Create Role.
+// @Param user body serializers.Role true "Role Info"
+// @Tags Role
+// @Accept json
+// @Produce json
+// @Success 200 {string} sent verify init.
+// @Router /create/ [post]
 func (u *RoleController) CreateRoleController(ctx *gin.Context) {
 	var roleInput serializers.Role
 	if err := ctx.ShouldBindJSON(&roleInput); err != nil {
@@ -31,6 +40,14 @@ func (u *RoleController) CreateRoleController(ctx *gin.Context) {
 	ctx.JSON(200, gin.H{"message": "Successfully role created!"})
 }
 
+// GetALLRoleController
+// @BasePath /api/v1
+// @Summary Create Role.
+// @Tags Role
+// @Accept json
+// @Produce json
+// @Success 200 {string} sent verify init.
+// @Router /list/ [get]
 func (u *RoleController) GetALLRoleController(ctx *gin.Context) {
 	limit := ctx.Query("limit")
 	offset := ctx.Query("offset")
