@@ -20,7 +20,7 @@ func NewRoleController(RoleService services.RoleService) *RoleController {
 // CreateRoleController
 // @BasePath /api/v1
 // @Summary Create Role.
-// @Param user body serializers.Role true "Role Info"
+// @Param role body serializers.Role true "Role Info"
 // @Tags Role
 // @Accept json
 // @Produce json
