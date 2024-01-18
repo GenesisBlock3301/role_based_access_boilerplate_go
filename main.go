@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations/db"
+	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/middlewares"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/routes"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/schemas"
 	_ "github.com/GenesisBlock3301/role_based_access_boilerplate_go/docs"
@@ -11,6 +12,7 @@ import (
 	"github.com/swaggo/files"       // swagger embed files
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"log"
+	"time"
 )
 
 func init() {
@@ -51,6 +53,10 @@ func main() {
 	// Initialize `gin` router
 	router := gin.Default()
 
+	// Create a new custom rate limiter with a limit of 5 request per second per IP
+	limiter := middlewares.NewCustomRateLimiter(5, time.Second)
+
+	router.Use(limiter.CustomRateLimiterMiddleware())
 	// Swagger route
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
