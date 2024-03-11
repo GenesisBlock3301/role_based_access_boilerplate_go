@@ -5,7 +5,7 @@ services:
     image: golang:alpine
     command: sh -c "go build -o app && ./app"
     ports:
-      - 8081:8080
+      - 8080:8080
     working_dir: /app
     volumes:
       - ./:/app

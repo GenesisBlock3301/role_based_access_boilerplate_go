@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations/db"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/middlewares"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/routes"
 	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/schemas"
 	_ "github.com/GenesisBlock3301/role_based_access_boilerplate_go/docs"
@@ -12,7 +12,7 @@ import (
 	"github.com/swaggo/files"       // swagger embed files
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
 	"log"
-	"time"
+	"net/http"
 )
 
 func init() {
@@ -54,13 +54,25 @@ func main() {
 	router := gin.Default()
 
 	// Create a new custom rate limiter with a limit of 5 request per second per IP
-	limiter := middlewares.NewCustomRateLimiter(5, time.Second)
+	//limiter := middlewares.NewCustomRateLimiter(5, time.Second)
 
-	router.Use(limiter.CustomRateLimiterMiddleware())
+	//router.Use(limiter.CustomRateLimiterMiddleware())
+	// for root -> redirect to -> /swagger/index.html
+	router.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
+	})
 	// Swagger route
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	router.HandleMethodNotAllowed = true
 	routes.RootRouter(router)
-	router.Run(":8081")
+	// Define the server address
+	addr := ":8080"
+
+	// Print the server address
+	fmt.Printf("Server is running on %s\n", addr)
+	fmt.Printf("Navigate to http://localhost%s\n", addr)
+
+	// Run the Gin application
+	router.Run(addr)
 }

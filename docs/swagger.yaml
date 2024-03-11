@@ -88,27 +88,6 @@ paths:
       summary: Register User.
       tags:
       - User
-  /create/:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: Role Info
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/serializers.Role'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: Create Role.
-      tags:
-      - Role
   /email-verify/:
     get:
       consumes:
@@ -151,20 +130,6 @@ paths:
       summary: Generate OTP.
       tags:
       - User
-  /list/:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: Create Role.
-      tags:
-      - Role
   /login:
     post:
       consumes:
@@ -191,6 +156,41 @@ paths:
       summary: Login user.
       tags:
       - User
+  /role/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Role Info
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.Role'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Create Role.
+      tags:
+      - Role
+  /role/list:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: GET roles.
+      tags:
+      - Role
   /verify-otp/:
     get:
       consumes:

@@ -25,7 +25,7 @@ func NewRoleController(RoleService services.RoleService) *RoleController {
 // @Accept json
 // @Produce json
 // @Success 200 {string} sent verify init.
-// @Router /create/ [post]
+// @Router /role/create [post]
 func (u *RoleController) CreateRoleController(ctx *gin.Context) {
 	var roleInput serializers.Role
 	if err := ctx.ShouldBindJSON(&roleInput); err != nil {
@@ -42,12 +42,12 @@ func (u *RoleController) CreateRoleController(ctx *gin.Context) {
 
 // GetALLRoleController
 // @BasePath /api/v1
-// @Summary Create Role.
+// @Summary GET roles.
 // @Tags Role
 // @Accept json
 // @Produce json
 // @Success 200 {string} sent verify init.
-// @Router /list/ [get]
+// @Router /role/list [get]
 func (u *RoleController) GetALLRoleController(ctx *gin.Context) {
 	limit := ctx.Query("limit")
 	offset := ctx.Query("offset")
