@@ -11,11 +11,11 @@ services:
       - ./:/app
     environment:
       POSTGRES_HOST: postgres
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: bs23
+      POSTGRES_DB: rolebasedcontrol
       CURRENT_SITE: postgres:8081/api/v1/
-      BASE_URL: ${BASE_URL}
+      BASE_URL: user/email-verify/
     depends_on:
       - postgres
 
@@ -25,8 +25,8 @@ services:
       - ./Role_based_access_control.sql:/docker-entrypoint-initdb.d/Role_based_access_control.sql
       - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_PASSWORD: bs23
+      POSTGRES_DB: rolebasedcontrol
 
 volumes:
   postgres-data:
