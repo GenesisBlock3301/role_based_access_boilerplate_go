@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations/db"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/routes"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/schemas"
-	_ "github.com/GenesisBlock3301/role_based_access_boilerplate_go/docs"
 	"github.com/gin-gonic/gin"
+	"github.com/go_user_role/backend/configurations"
+	"github.com/go_user_role/backend/configurations/db"
+	"github.com/go_user_role/backend/middlewares"
+	"github.com/go_user_role/backend/routes"
+	"github.com/go_user_role/backend/schemas"
+	_ "github.com/go_user_role/docs"
 	"github.com/joho/godotenv"
 	"github.com/swaggo/files"       // swagger embed files
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -22,7 +23,7 @@ func init() {
 
 func initEnv() {
 	log.Println("Loading env setting....")
-	err := godotenv.Load()
+	err := godotenv.Load(".env.local")
 	if err != nil {
 		log.Fatal("No local env file. Using global OS environment variables")
 	}
@@ -52,6 +53,8 @@ func initEnv() {
 func main() {
 	// Initialize `gin` router
 	router := gin.Default()
+
+	router.Use(middlewares.JWTAuthMiddleware())
 
 	// Create a new custom rate limiter with a limit of 5 request per second per IP
 	//limiter := middlewares.NewCustomRateLimiter(5, time.Second)

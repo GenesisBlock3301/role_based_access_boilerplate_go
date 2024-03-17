@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/services"
 	"github.com/gin-gonic/gin"
+	"github.com/go_user_role/backend/services"
 	"net/http"
 	"os"
 )

@@ -2,12 +2,12 @@ package services
 
 import (
 	"errors"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations/db"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/schemas"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/serializers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/utils"
 	"github.com/dgrijalva/jwt-go"
+	"github.com/go_user_role/backend/configurations"
+	"github.com/go_user_role/backend/configurations/db"
+	"github.com/go_user_role/backend/schemas"
+	"github.com/go_user_role/backend/serializers"
+	"github.com/go_user_role/backend/utils"
 )
 
 type IUserServiceInterface interface {

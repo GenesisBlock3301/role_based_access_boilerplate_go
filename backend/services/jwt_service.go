@@ -85,23 +85,6 @@ func ExtractTokenID(c *gin.Context) (uint, error) {
 		}
 		return []byte("secret_no_sifat"), nil
 	})
-	//if err != nil {
-	//	if ve, ok := err.(*jwt.ValidationError); ok {
-	//		if ve.Errors&jwt.ValidationErrorExpired != 0 {
-	//			// Token has expired
-	//			fmt.Println("Token has expired")
-	//		}
-	//	} else {
-	//		// Other validation error occurred
-	//		fmt.Println("Error validating token:", err)
-	//	}
-	//} else if token.Valid {
-	//	// Token is valid
-	//	fmt.Println("Token is valid")
-	//} else {
-	//	// Token is not valid for some other reason
-	//	fmt.Println("Token is not valid")
-	//}
 	if err != nil {
 		return 0, err
 	}

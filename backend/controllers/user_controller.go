@@ -1,14 +1,15 @@
 package controllers
 
 import (
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/serializers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/services"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/utils"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/validations"
 	"github.com/diebietse/gotp/v2"
+	_ "github.com/diebietse/gotp/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/go_user_role/backend/configurations"
+	"github.com/go_user_role/backend/serializers"
+	"github.com/go_user_role/backend/services"
+	"github.com/go_user_role/backend/utils"
+	"github.com/go_user_role/backend/validations"
 	"net/http"
 	"time"
 )
@@ -33,7 +34,7 @@ func NewUserController(service services.UserService) *UserController {
 // @Produce json
 // @Success 200 {string} successfully login
 // @failure      400              {string}  string    "error"
-// @Router /create [post]
+// @Router /user/create [post]
 func (u *UserController) CreateUserController(ctx *gin.Context) {
 	var userInput serializers.RegisterSerializer
 	// Validate UserInput
@@ -66,7 +67,7 @@ func (u *UserController) CreateUserController(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {string} successfully login.
 // @failure      400              {string}  string    "error"
-// @Router /login [post]
+// @Router /user/login [post]
 func (u *UserController) LoginController(ctx *gin.Context) {
 	var user serializers.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
@@ -101,7 +102,7 @@ func (u *UserController) LoginController(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} get user successfully.
-// @Router / [get]
+// @Router /user [get]
 func (u *UserController) GetCurrentUserController(ctx *gin.Context) {
 	userId, err := services.ExtractTokenID(ctx)
 	if err != nil {
@@ -130,7 +131,7 @@ func (u *UserController) GetCurrentUserController(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} successfully verify email.
-// @Router /email-verify/ [get]
+// @Router /user/email-verify [get]
 func (u *UserController) VerifyEmailController(ctx *gin.Context) {
 	token := ctx.Query("token")
 
@@ -153,7 +154,7 @@ func (u *UserController) VerifyEmailController(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} successfully generate OTP
-// @Router /generate-otp/ [get]
+// @Router /user/generate-otp [get]
 func (u *UserController) GenerateOTP(ctx *gin.Context) {
 	var UserLogin serializers.LoginSerializer
 	// Validate UserInput
@@ -186,7 +187,7 @@ func (u *UserController) GenerateOTP(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {string} sent verify init.
-// @Router /verify-otp/ [get]
+// @Router /user/verify-otp [get]
 func (u *UserController) VerifyOTP(ctx *gin.Context) {
 	var otp serializers.VerifyOTPSerializer
 	// Validate OTP Input.

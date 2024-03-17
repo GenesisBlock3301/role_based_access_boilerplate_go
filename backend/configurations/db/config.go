@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/configurations"
+	"github.com/go_user_role/backend/configurations"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

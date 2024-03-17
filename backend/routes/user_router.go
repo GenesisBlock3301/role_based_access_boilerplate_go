@@ -1,16 +1,15 @@
 package routes
 
 import (
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/controllers"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/middlewares"
-	"github.com/GenesisBlock3301/role_based_access_boilerplate_go/backend/services"
 	"github.com/gin-gonic/gin"
+	"github.com/go_user_role/backend/controllers"
+	"github.com/go_user_role/backend/services"
 )
 
 func UserRouter(userRouter *gin.RouterGroup) {
 	userService := &services.UserService{}
 	userController := controllers.NewUserController(*userService)
-	userRouter.GET("/", middlewares.JWTAuthMiddleware(), userController.GetCurrentUserController)
+	userRouter.GET("/", userController.GetCurrentUserController)
 	userRouter.POST("/create/", userController.CreateUserController)
 	userRouter.GET("/email-verify/", userController.VerifyEmailController)
 	userRouter.POST("/login", userController.LoginController)

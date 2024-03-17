@@ -47,115 +47,6 @@ info:
   title: Role Based Authentication API
   version: "1.0"
 paths:
-  /:
-    get:
-      consumes:
-      - application/json
-      description: do ping
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: Get authenticated user.
-      tags:
-      - User
-  /create:
-    post:
-      consumes:
-      - application/json
-      description: User Registration
-      parameters:
-      - description: User info
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/serializers.RegisterSerializer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: error
-          schema:
-            type: string
-      summary: Register User.
-      tags:
-      - User
-  /email-verify/:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: Email to be verified
-        format: email
-        in: query
-        name: token
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: Verify email controller.
-      tags:
-      - User
-  /generate-otp/:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: Generate OTP
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/serializers.LoginSerializer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: Generate OTP.
-      tags:
-      - User
-  /login:
-    post:
-      consumes:
-      - application/json
-      description: User login
-      parameters:
-      - description: User info
-        in: body
-        name: user
-        required: true
-        schema:
-          $ref: '#/definitions/serializers.LoginSerializer'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-        "400":
-          description: error
-          schema:
-            type: string
-      summary: Login user.
-      tags:
-      - User
   /role/create:
     post:
       consumes:
@@ -191,7 +82,116 @@ paths:
       summary: GET roles.
       tags:
       - Role
-  /verify-otp/:
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: do ping
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Get authenticated user.
+      tags:
+      - User
+  /user/create:
+    post:
+      consumes:
+      - application/json
+      description: User Registration
+      parameters:
+      - description: User info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.RegisterSerializer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+      summary: Register User.
+      tags:
+      - User
+  /user/email-verify:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Email to be verified
+        format: email
+        in: query
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Verify email controller.
+      tags:
+      - User
+  /user/generate-otp:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Generate OTP
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.LoginSerializer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Generate OTP.
+      tags:
+      - User
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: User login
+      parameters:
+      - description: User info
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/serializers.LoginSerializer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "400":
+          description: error
+          schema:
+            type: string
+      summary: Login user.
+      tags:
+      - User
+  /user/verify-otp:
     get:
       consumes:
       - application/json
